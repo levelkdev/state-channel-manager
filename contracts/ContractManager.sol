@@ -71,7 +71,7 @@ contract ChannelManager is ChannelIdentifier {
         Withdrawal storage withdrawal = withdrawals[getWithdrawalId(channelId, nonce, msg.sender)];
         require(!withdrawal.complete, WITHDRAWAL_COMPLETE);
         require(!withdrawal.blocked, WITHDRAWAL_BLOCKED);
-        
+
         withdrawal.value = value;
         withdrawal.openedTime = now;
         // Set counterparty to the participant that is not msg.sender
@@ -91,29 +91,29 @@ contract ChannelManager is ChannelIdentifier {
         require(address(arbiter) != address(0), INVALID_ARBITER);
         bytes32 channelId = getChannelId(sender, receiver, arbiter);
         Channel storage channel = channels[channelId];
-        
+
         // Set requester to the channel participant that is not msg.sender
         address payable requester = msg.sender == receiver ? sender : receiver;
         Withdrawal storage withdrawal = withdrawals[getWithdrawalId(channelId, nonce, requester)];
         require(!withdrawal.complete, WITHDRAWAL_COMPLETE);
         require(!withdrawal.blocked, WITHDRAWAL_BLOCKED);
-        
+
         // If sender does not agree with the withdrawal's value, withdrawal is blocked and receiver must force withdraw
         if (msg.sender == sender && value != withdrawal.value) {
             withdrawal.blocked = true;
             return;
         }
-        
+
         require(value == withdrawal.value, "Withdrawal must be completed with same value");
         // Either msg.sender is the counterparty or the dispute period is past to complete the withdrawal
         require(
             msg.sender == withdrawal.counterparty || withdrawal.openedTime + DISPUTE_PERIOD < now, 
             "Invalid caller or withdrawal dispute period has not passed"
         );
-        
+
         // Complete the withdrawal
         withdrawal.complete = true;
-        
+
         if (requester == sender) {
             _senderWithdrawal(channel, sender, value);
         } else {
@@ -132,10 +132,10 @@ contract ChannelManager is ChannelIdentifier {
         require(sender != address(0), INVALID_PARTICIPANT);
         require(receiver != address(0), INVALID_PARTICIPANT);
         require(address(arbiter).isContract(), "Arbiter contract has not been deployed");
-        
+
         bytes32 channelId = getChannelId(sender, receiver, arbiter);
         Channel storage channel = channels[channelId];
-        
+
         uint256 channelValue = arbiter.channelValueForUpdate(channelId, nonce);
         uint256 valueAvailable = channelValue.sub(channel.valueWithdrawnByReceiver);
         _receiverWithdrawal(channel, receiver, nonce, valueAvailable);
@@ -159,7 +159,7 @@ contract ChannelManager is ChannelIdentifier {
         require(value <= channel.depositValue, INSUFFICIENT_VALUE);
         require(nonce > channel.nonceOfLastReceiverWithdrawal, INVALID_NONCE);
         channel.nonceOfLastReceiverWithdrawal = nonce;
-        
+
         channel.depositValue -= value;
         channel.valueWithdrawnByReceiver += value;
         receiver.transfer(value);

@@ -15,20 +15,20 @@ contract PaymentChannelArbiter is IChannelArbiter, ChannelIdentifier {
         address sender, 
         address receiver,
         uint256 nonce,
-        uint256 value,
+        uint256 channelValue,
         bytes memory signature
     )
         public
     {
-        bytes32 messageHash = keccak256(abi.encodePacked(sender, receiver, address(this), nonce, value));
+        bytes32 messageHash = keccak256(abi.encodePacked(sender, receiver, address(this), nonce, channelValue));
         address signer = messageHash.toEthSignedMessageHash().recover(signature);
-        require(signer == msg.sender, "Invalid signer");
+        require(signer == sender, "Invalid signer");
         
         bytes32 channelId = getChannelId(sender, receiver, this);
-        updates[channelId][nonce] = value;
+        updates[channelId][nonce] = channelValue;
     }
 
-    function channelValueForUpdate(bytes32 channelId, uint256 nonce) external view returns (uint256 value) {
+    function channelValueForUpdate(bytes32 channelId, uint256 nonce) external view returns (uint256 channelValue) {
         return updates[channelId][nonce];
     }
 
