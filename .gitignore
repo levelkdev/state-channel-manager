@@ -1,0 +1,8 @@
+# Dependency directory
+node_modules
+
+# truffle build directory
+build/
+
+# macOS
+.DS_Store

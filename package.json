@@ -1,0 +1,35 @@
+{
+  "name": "state-channel-manager",
+  "version": "1.0.0",
+  "description": "",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "compile": "truffle compile",
+    "test": "npm run compile && scripts/test.sh"
+  },
+  "keywords": [
+    "state",
+    "channel",
+    "state-channel",
+    "solidity",
+    "ethereum",
+    "create2",
+    "counterfactual",
+    "layer",
+    "2",
+    "smart",
+    "contract"
+  ],
+  "author": "Chris Whinfrey",
+  "license": "MIT",
+  "dependencies": {
+    "openzeppelin-solidity": "^2.1.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "ganache-cli": "^6.3.0",
+    "truffle": "^5.0.3"
+  }
+}
