@@ -136,7 +136,7 @@ contract ChannelManager is ChannelIdentifier {
         bytes32 channelId = getChannelId(sender, receiver, arbiter);
         Channel storage channel = channels[channelId];
 
-        uint256 channelValue = arbiter.channelValueForUpdate(channelId, nonce);
+        uint256 channelValue = arbiter.channelValueForUpdate(sender, receiver, nonce);
         uint256 valueAvailable = channelValue.sub(channel.valueWithdrawnByReceiver);
         _receiverWithdrawal(channel, receiver, nonce, valueAvailable);
     }

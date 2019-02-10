@@ -5,14 +5,14 @@ import "./IChannelArbiter.sol";
 import "../ChannelIdentifier.sol";
 
 contract PaymentChannelArbiter is IChannelArbiter, ChannelIdentifier {
-    
+
     using ECDSA for bytes32;
 
     // mapping of the channelId to a mapping of the nonce to the channel value
     mapping (bytes32 => mapping(uint256 => uint256)) private updates;
 
     function updateChannel(
-        address sender, 
+        address sender,
         address receiver,
         uint256 nonce,
         uint256 channelValue,
@@ -28,7 +28,8 @@ contract PaymentChannelArbiter is IChannelArbiter, ChannelIdentifier {
         updates[channelId][nonce] = channelValue;
     }
 
-    function channelValueForUpdate(bytes32 channelId, uint256 nonce) external view returns (uint256 channelValue) {
+    function channelValueForUpdate(address sender, address receiver, uint256 nonce) external view returns (uint256 channelValue) {
+        bytes32 channelId = getChannelId(sender, receiver, this);
         return updates[channelId][nonce];
     }
 
