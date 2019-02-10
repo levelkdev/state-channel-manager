@@ -1,5 +1,5 @@
 const { toWei } = web3.utils
-const should = require('chai').should();
+const should = require('chai').should()
 
 const ChannelManager = artifacts.require('ChannelManager')
 const PaymentChannelArbiter = artifacts.require('PaymentChannelArbiter')
