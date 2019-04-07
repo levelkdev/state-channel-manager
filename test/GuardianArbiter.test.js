@@ -8,7 +8,7 @@ const { sign } = web3.eth
 const NONCE = 55
 const CHANNEL_VALUE = 100
 
-contract.only('GuardianArbiter', (accounts) => {
+contract('GuardianArbiter', (accounts) => {
   const party1 = accounts[1]
   const party2 = accounts[2]
   const guardian = accounts[3]
@@ -28,8 +28,8 @@ contract.only('GuardianArbiter', (accounts) => {
 
     // party1 signs a payment to party2
     const party2WinsHash = soliditySha3(
-        party2,
         party1,
+        party2,
         arbiter.address,
         NONCE,
         CHANNEL_VALUE
